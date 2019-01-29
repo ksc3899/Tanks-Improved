@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TankShooting : MonoBehaviour
 {
-    public int playerNumber = 1;
+    public int playerNumber;
     public GameObject shell;
     public Transform fireTransform;
     public Slider aimSlider;
@@ -15,6 +15,8 @@ public class TankShooting : MonoBehaviour
     public float minimumLaunchForce = 15f;
     public float maximumLaunchForce = 30f;
     public float maximumChargeTime = 0.75f;
+    public int ammoLeftTank1 = 5;
+    public int ammoLeftTank2 = 5;
 
     string shootButton;
     float currentLaunchForce;
@@ -40,24 +42,59 @@ public class TankShooting : MonoBehaviour
         if (currentLaunchForce >= maximumLaunchForce && !fired)
         {
             currentLaunchForce = maximumLaunchForce;
-            Fire();
+            if (this.playerNumber == 1 && ammoLeftTank1 > 0)
+            {
+                ammoLeftTank1--;
+                Fire();
+            }
+            if (this.playerNumber == 2 && ammoLeftTank2 > 0)
+            {
+                ammoLeftTank2--;
+                Fire();
+            }
         }
         else if (Input.GetButtonDown(shootButton))
         {
             fired = false;
 
-            currentLaunchForce = minimumLaunchForce;
-            firingAudio.clip = chargingAudio;
-            firingAudio.Play();
+            if (this.playerNumber == 1 && ammoLeftTank1 > 0)
+            {
+                currentLaunchForce = minimumLaunchForce;
+                firingAudio.clip = chargingAudio;
+                firingAudio.Play();
+            }
+            if (this.playerNumber == 2 && ammoLeftTank2 > 0)
+            {
+                currentLaunchForce = minimumLaunchForce;
+                firingAudio.clip = chargingAudio;
+                firingAudio.Play();
+            }
         }
         else if(Input.GetButton(shootButton) && !fired)
         {
-            currentLaunchForce += (chargeSpeed * Time.deltaTime);
-            aimSlider.value = currentLaunchForce;
+            if (this.playerNumber == 1 && ammoLeftTank1 > 0)
+            {
+                currentLaunchForce += (chargeSpeed * Time.deltaTime);
+                aimSlider.value = currentLaunchForce;
+            }
+            if (this.playerNumber == 2 && ammoLeftTank2 > 0)
+            {
+                currentLaunchForce += (chargeSpeed * Time.deltaTime);
+                aimSlider.value = currentLaunchForce;
+            }
         }
         else if(Input.GetButtonUp(shootButton) && !fired)
         {
-            Fire();
+            if (this.playerNumber == 1 && ammoLeftTank1 > 0)
+            {
+                ammoLeftTank1--;
+                Fire();
+            }
+            if (this.playerNumber == 2 && ammoLeftTank2 > 0)
+            {
+                ammoLeftTank2--;
+                Fire();
+            }
         }
     }
 
