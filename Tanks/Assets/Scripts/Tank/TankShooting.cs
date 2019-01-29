@@ -98,6 +98,27 @@ public class TankShooting : MonoBehaviour
         }
     }
 
+    private IEnumerator OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "AmmoCollection")
+        {
+            if (this.playerNumber == 1)
+            {
+                ammoLeftTank1++;
+            }
+            if (this.playerNumber == 2)
+            {
+                ammoLeftTank2++;
+            }
+
+            other.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            other.gameObject.GetComponent<BoxCollider>().enabled = false;
+            yield return new WaitForSeconds(3f);
+            other.gameObject.GetComponent<MeshRenderer>().enabled = true;
+            other.gameObject.GetComponent<BoxCollider>().enabled = true;
+        }
+    }
+
     private void Fire()
     {
         fired = true;
