@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BreakableWall : MonoBehaviour
+public class IEBreakableWall : MonoBehaviour
 {
     public float strikeForce = 5f;
 

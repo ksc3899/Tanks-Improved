@@ -21,9 +21,13 @@ public class ShellExplosion  : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "BreakableWall")
+        if(other.gameObject.tag == "IEBreakableWall")
         {
-            other.GetComponent<BreakableWall>().WallBreakDown(this.transform.forward);
+            other.gameObject.GetComponent<IEBreakableWall>().WallBreakDown(this.transform.forward);    
+        }
+        else if(other.gameObject.tag == "EBreakableWall")
+        {
+            other.GetComponent<EBreakableWall>().WallDestruction(this.transform.position, this.transform.forward);
         }
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, tanksLayer);
