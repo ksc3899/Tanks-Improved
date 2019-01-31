@@ -46,29 +46,6 @@ public class TankMovement : MonoBehaviour
 
     private void Update()
     {
-        /*if (Mathf.Abs(movementInputValue) < 0.1f && Mathf.Abs(turnInputValue) < 0.1f)
-        {
-            // ... and if the audio source is currently playing the driving clip...
-            if (tankAudio.clip == tankMoving)
-            {
-                // ... change the clip to idling and play it.
-                tankAudio.clip = tankIdle;
-                tankAudio.pitch = Random.Range(originalPitch- pitchRange, originalPitch+ pitchRange);
-                tankAudio.Play();
-            }
-        }
-        else
-        {
-            // Otherwise if the tank is moving and if the idling clip is currently playing...
-            if (tankAudio.clip == tankIdle)
-            {
-                // ... change the clip to driving and play.
-                tankAudio.clip = tankMoving;
-                tankAudio.pitch = Random.Range(originalPitch- pitchRange, originalPitch+ pitchRange);
-                tankAudio.Play();
-            }
-        }*/
-        
         if (Mathf.Abs(turnInputValue) > 0.2f && Mathf.Abs(movementInputValue) > 0.2f)
         {
             if (tankAudio.clip == tankIdle)

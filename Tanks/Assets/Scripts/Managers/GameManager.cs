@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public Text messageText;
     public GameObject tankPrefab;
     public TankManager[] tankManager;
+    [HideInInspector]public EnemyMovement enemyMovement;
 
     int roundNumber;
     WaitForSeconds startWait;
@@ -28,7 +29,9 @@ public class GameManager : MonoBehaviour
         SpawnAllTanks();
         SetCameraTargets();
 
-        StartCoroutine(GameLoop()); 
+        StartCoroutine(GameLoop());
+
+        enemyMovement = FindObjectOfType<EnemyMovement>();
     }
 
     private void SpawnAllTanks()
@@ -36,6 +39,7 @@ public class GameManager : MonoBehaviour
         for(int i = 0; i < tankManager.Length;i++)
         {
             tankManager[i].instance = Instantiate(tankPrefab, tankManager[i].spawnPoint.position, tankManager[i].spawnPoint.rotation) as GameObject;
+            enemyMovement.SetTargets(tankManager[i].instance);
             tankManager[i].playerNumber = i + 1;
             tankManager[i].Setup();
         }
@@ -73,12 +77,15 @@ public class GameManager : MonoBehaviour
         ResetAllTanks();
         DisableTankControl();
         cameraController.SetStartPositionAndSize();
+        enemyMovement.gameEnabled = false;
 
         roundNumber++;
 
         messageText.text = "ROUND " + roundNumber;
 
         yield return startWait;
+
+        enemyMovement.gameEnabled = true;
     }
 
     private IEnumerator RoundPlaying()
@@ -108,7 +115,9 @@ public class GameManager : MonoBehaviour
         string message = EndMessage();
         messageText.text = message;
 
-        yield return endWait;   
+        yield return endWait;
+
+        enemyMovement.gameEnabled = false;
     }
 
     private TankManager GetRoundWinner()
