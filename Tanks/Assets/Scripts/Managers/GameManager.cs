@@ -96,15 +96,10 @@ public class GameManager : MonoBehaviour
 
         messageText.text = "ROUND " + roundNumber;
 
-        if (enemyTank != null)
-        {
-            enemyTank.transform.position = enemyStartPosition;
-        }
-        else
-        {
-            enemyTank = Instantiate(enemyTankPrefab, enemyStartPosition, Quaternion.identity) as GameObject;
-        }
-
+        enemyTank.SetActive(true);
+        enemyTank.GetComponent<TankHealth>().currentHealth = enemyTank.GetComponent<TankHealth>().startingHealth;
+        enemyTank.transform.position = enemyStartPosition;
+       
         yield return startWait;
 
         enemyMovement.gameEnabled = true;
@@ -123,6 +118,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RoundEnding()
     {
+        enemyTank.SetActive(false);
         DisableTankControl();
 
         roundWinner = null;
@@ -146,11 +142,12 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < tankManager.Length; i++)
         {
-            if(tankManager[i].instance.activeSelf)
+            if (tankManager[i].instance.activeSelf)
             {
                 return tankManager[i];
             }
         }
+
         return null;
     }
 
@@ -195,6 +192,14 @@ public class GameManager : MonoBehaviour
         for(int i = 0;i<tankManager.Length;i++)
         {
             tankManager[i].Reset();
+            if (i == 0)
+            {
+                tankManager[i].instance.gameObject.GetComponent<TankShooting>().ammoLeftTank1 = 5;
+            }
+            else if (i == 1)
+            {
+                tankManager[i].instance.gameObject.GetComponent<TankShooting>().ammoLeftTank2 = 5;
+            }
         }
     }
 
@@ -226,7 +231,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if(enemyTank != null)
+        if(enemyTank.activeSelf)
         {
             numberOfTanksLeft++;
         }

@@ -11,7 +11,7 @@ public class EnemyShooting : MonoBehaviour
     public float maximumLaunchForce = 30f;
     public float maximumChargeTime = 0.75f;
     public bool fired = false;
-    public float shotDelay = 0.75f;
+    public float shotDelay = 0.5f;
 
     float requiredLaunchForce;
     float currentLaunchForce;
@@ -21,6 +21,7 @@ public class EnemyShooting : MonoBehaviour
     {
         currentLaunchForce = minimumLaunchForce;
         requiredLaunchForce = currentLaunchForce;
+        fired = false;
     }
 
     private void Start()
@@ -42,10 +43,9 @@ public class EnemyShooting : MonoBehaviour
             {
                 currentLaunchForce += (chargeSpeed * Time.deltaTime);
             }
-
             Fire();
         }
-
+        
         yield return new WaitForSeconds(shotDelay);
 
         fired = false;

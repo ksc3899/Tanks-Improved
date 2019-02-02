@@ -9,13 +9,13 @@ public class EnemyMovement : MonoBehaviour
 
     EnemyShooting enemyShooting;
     int targetsIndex = 0;
-    Rigidbody enemyRigidbody;
+    //Rigidbody enemyRigidbody;
     GameObject[] target = new GameObject[5];
     NavMeshAgent navMesh;
 
     private void Awake()
     {
-        enemyRigidbody = GetComponent<Rigidbody>();
+        //enemyRigidbody = GetComponent<Rigidbody>();
     }
 
     private void Start()
