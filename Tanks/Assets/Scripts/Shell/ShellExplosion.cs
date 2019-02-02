@@ -15,8 +15,7 @@ public class ShellExplosion  : MonoBehaviour
     private void Awake()
     {
         Destroy(gameObject, maximumLifeTime);
-        //tanksLayer = LayerMask.GetMask("Players");
-             
+        tanksLayer = LayerMask.GetMask("Players");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -43,8 +42,11 @@ public class ShellExplosion  : MonoBehaviour
             TankHealth targetHealth = targetRigidbody.GetComponent<TankHealth>();
 
             if (!targetHealth)
+            {
+                Debug.Log("asdf");
                 continue;
-
+            }
+                
             float damage = CalculateDamage(targetRigidbody.position);
             targetHealth.TakeDamage(damage);
         }

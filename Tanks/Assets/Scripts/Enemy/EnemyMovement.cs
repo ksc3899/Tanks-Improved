@@ -5,9 +5,9 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
-   [HideInInspector] public bool gameEnabled = false;
-    public float minimumDistance = 2f;
+    [HideInInspector] public bool gameEnabled = false;
 
+    EnemyShooting enemyShooting;
     int targetsIndex = 0;
     Rigidbody enemyRigidbody;
     GameObject[] target = new GameObject[5];
@@ -20,6 +20,7 @@ public class EnemyMovement : MonoBehaviour
 
     private void Start()
     {
+        enemyShooting = GetComponent<EnemyShooting>();
         navMesh = GetComponent<NavMeshAgent>();
     }
 
@@ -47,6 +48,11 @@ public class EnemyMovement : MonoBehaviour
                     setTarget = i;
                     preference = preferenceTest;
                 }
+            }
+
+            if (TargetsDistance(target[setTarget]) <= 15f && !enemyShooting.fired)
+            {
+                StartCoroutine(enemyShooting.CheckObstruction());
             }
 
             navMesh.SetDestination(this.target[setTarget].transform.position);
