@@ -10,6 +10,7 @@ public class EBreakableWall : MonoBehaviour
     public LayerMask destructibleBlocks;
     public float strikeForce = 1000f;
 
+    private int blocksDestroyed = 0;
     private List<Vector3> wallBlocks = new List<Vector3>();
 
     private void InitiateList()
@@ -41,11 +42,10 @@ public class EBreakableWall : MonoBehaviour
                 c.gameObject.AddComponent<Rigidbody>();
                 Rigidbody rb = c.gameObject.GetComponent<Rigidbody>();
                 rb.AddForce(strikeForce * shellDirection, ForceMode.Impulse);
+                blocksDestroyed++;
                 DestroWallBlock(c.gameObject);
             }
         }
-
-        Destroy(this.gameObject, 15f);
     }
 
     private void DestroWallBlock(GameObject toDestroy)
@@ -58,4 +58,11 @@ public class EBreakableWall : MonoBehaviour
         InitiateList();
     }
 
+    private void Update()
+    {
+        if (blocksDestroyed >= 7)
+        { 
+            Destroy(this.gameObject, 2f);
+        }
+    }
 }

@@ -32,13 +32,21 @@ public class EnemyMovement : MonoBehaviour
     private void FixedUpdate()
     {
         int setTarget = 0;
-        float preference;
+        float preference = 0f;
 
         if (gameEnabled == true)
         {
             for(int i = 0; i < targetsIndex; i++)
             {
-                float preferenceTest = 1 / (TargetsDistance(target[i]));
+                if (target[i].GetComponent<TankHealth>().currentHealth <= 0)
+                    continue;
+
+                float preferenceTest = 1 / (TargetsDistance(target[i]) * TargetsHealth(target[i]) * TargetsAmmoLeft(target[i], i));
+                if (preferenceTest > preference)
+                {
+                    setTarget = i;
+                    preference = preferenceTest;
+                }
             }
 
             navMesh.SetDestination(this.target[setTarget].transform.position);
@@ -47,17 +55,19 @@ public class EnemyMovement : MonoBehaviour
 
     private float TargetsDistance(GameObject targetObject)
     {
-        float minimumDistantTarget = 100f;
-        if (Vector3.Distance(this.transform.position, targetObject.transform.position) < minimumDistantTarget)
-        {
-            minimumDistantTarget = Vector3.Distance(this.transform.position, targetObject.transform.position);
-        }
-        
-        return minimumDistantTarget;
+        return Vector3.Distance(this.transform.position, targetObject.transform.position);
     }
 
-    private void TargetsHealth()
+    private float TargetsHealth(GameObject targetObject)
     {
+        return targetObject.GetComponent<TankHealth>().currentHealth / 10f;
+    }
 
+    private float TargetsAmmoLeft(GameObject targetObject, int i)
+    {
+        if (i == 0)
+            return targetObject.GetComponent<TankShooting>().ammoLeftTank1;
+        else
+            return targetObject.GetComponent<TankShooting>().ammoLeftTank2;
     }
 }

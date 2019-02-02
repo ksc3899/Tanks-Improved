@@ -11,10 +11,10 @@ public class TankHealth : MonoBehaviour
     public Color fullHealthColor = Color.green;
     public Color nillHealthColor = Color.red;
     public GameObject explosionPrefab;
+    [HideInInspector]public float currentHealth;
 
     AudioSource explosionAudio;
     ParticleSystem explosionParticles;
-    float currentHealth;
     bool dead;
 
     private void Awake()

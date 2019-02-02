@@ -13,13 +13,21 @@ public class GameManager : MonoBehaviour
     public Text messageText;
     public GameObject tankPrefab;
     public TankManager[] tankManager;
+    public Vector3 enemyStartPosition;
     [HideInInspector]public EnemyMovement enemyMovement;
+    public GameObject enemyTankPrefab;
 
+    GameObject enemyTank;
     int roundNumber;
     WaitForSeconds startWait;
     WaitForSeconds endWait;
     TankManager roundWinner;
     TankManager gameWinner;
+
+    private void Awake()
+    {
+        enemyTank = GameObject.FindGameObjectWithTag("Enemy");
+    }
 
     private void Start()
     {
@@ -31,12 +39,12 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(GameLoop());
 
-        enemyMovement = FindObjectOfType<EnemyMovement>();
+        enemyMovement = enemyTank.GetComponent<EnemyMovement>();
     }
 
     private void SpawnAllTanks()
     {
-        for(int i = 0; i < tankManager.Length;i++)
+        for(int i = 0; i < tankManager.Length; i++)
         {
             tankManager[i].instance = Instantiate(tankPrefab, tankManager[i].spawnPoint.position, tankManager[i].spawnPoint.rotation) as GameObject;
             enemyMovement.SetTargets(tankManager[i].instance);
@@ -47,9 +55,14 @@ public class GameManager : MonoBehaviour
 
     private void SetCameraTargets()
     {
-        Transform[] targets = new Transform[tankManager.Length];    
-        for(int i = 0;i < targets.Length;i++)
+        Transform[] targets = new Transform[tankManager.Length + 1];
+        for(int i = 0;i < tankManager.Length + 1; i++)
         {
+            if(i == tankManager.Length)
+            {
+                targets[i] = enemyTank.transform;
+                continue; 
+            }
             targets[i] = tankManager[i].instance.transform;
         }
 
@@ -83,6 +96,15 @@ public class GameManager : MonoBehaviour
 
         messageText.text = "ROUND " + roundNumber;
 
+        if (enemyTank != null)
+        {
+            enemyTank.transform.position = enemyStartPosition;
+        }
+        else
+        {
+            enemyTank = Instantiate(enemyTankPrefab, enemyStartPosition, Quaternion.identity) as GameObject;
+        }
+
         yield return startWait;
 
         enemyMovement.gameEnabled = true;
@@ -115,9 +137,9 @@ public class GameManager : MonoBehaviour
         string message = EndMessage();
         messageText.text = message;
 
-        yield return endWait;
-
         enemyMovement.gameEnabled = false;
+
+        yield return endWait;
     }
 
     private TankManager GetRoundWinner()
@@ -203,6 +225,12 @@ public class GameManager : MonoBehaviour
                 numberOfTanksLeft++;
             }
         }
+
+        if(enemyTank != null)
+        {
+            numberOfTanksLeft++;
+        }
+
         return numberOfTanksLeft <= 1;
     }
  }
