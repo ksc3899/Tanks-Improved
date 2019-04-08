@@ -1,4 +1,0 @@
-1. breakable walls (done)
-2. 3 types of walls - breakable(done), unbreakable(done), visible
-3. ammo(done)
-4. ai
